@@ -13,23 +13,26 @@ class Search extends Component {
     }
 
     handleChange = (e) => {
-
+        
         this.setState({ query: e.target.value })
     }
 
-    search = (e) => {
+    handleSubmit = (e) => {
         const { state: { query } } = this
         e.preventDefault()
 
-        if (query) { this.props.history.push(`/search/${query}`) }
-    }
+        if(query) { 
+            this.props.history.push(`/list/${query}`)
+                }
+        }
+    
 
 
     render() {
         return (
 
             <div className="search-wrapper">
-                <form onSubmit={this.search}>
+                <form onSubmit={this.handleSubmit}>
                     <div className="field has-addons">
                         <div className="control">
                             <input className="input" type="text" placeholder="Find a Beer" onChange={this.handleChange} />
