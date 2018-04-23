@@ -4,47 +4,56 @@ import './styles/main.css'
 import 'bulma/css/bulma.css'
 
 class Card extends Component {
-    constructor() {
-        super()
-
-        this.state = {
-            beer: {}
+    state = {
+        beer: '',
+        description:'',
+        category: ''
+    }
+   
+    retrieve = (id) => {
+       
+        if (id) {
+            beersApi.retrieve(id)
+                .then(beer => {
+                    this.setState({
+                        name: this.props.name,
+                        description: beer.style.description,
+                        category: beer.style.category.name
+                     })
+                })
         }
     }
 
-    componentWillMount() {
-        const { params: { id } } = this.props.match
+    componentWillMount(){
+        this.retrieve(this.props.id)
+    }
 
-        if (id) {
+    componentWillReceiveProps(props) {
+        this.retrieve(this.props.id)
 
-            beersApi.retrieve(id)
-                .then(beer => this.setState({ beer }))
-        }
     }
 
     render() {
-        const { state: { beer } } = this
-        console.log(beer)
+        const {state:{name, description, category }} = this
+       
         return (
-            beer ?
-                <div>
-                    <h3>{beer.name}</h3>
-                    <div className="blog-card spring-fever">
-                        <div className="title-content">
-                            <hr />
-                            <div className="intro">{beer.id}</div>
+           
+                <div className="col" >
+                    <div className="container">
+                        <div className="front">
+                            <div className="inner">
+                                <p>{name}</p>
+                                <span>{category}</span>
+                            </div>
                         </div>
-                        <div className="card-info">{beer.description}
+                        <div className="back">
+                            <div className="inner">
+                                <p>{description}</p>
+                            </div>
                         </div>
-                        <ul className="utility-list">
-
-                            <li className="date">{beer.createDate}</li>
-                        </ul>
-                        <div className="gradient-overlay"></div>
-                        <div className="color-overlay"></div>
                     </div>
                 </div>
-                : undefined
+                
         )
     }
 }
